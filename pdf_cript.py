@@ -2,6 +2,7 @@ import os
 import streamlit as st
 import pikepdf
 from pathlib import Path
+import tempfile
 
 # Diccionario con los NITs de los bancos
 BANCO_NITS = {
@@ -25,7 +26,8 @@ def crear_pdf_con_adjunto(archivo_correo, archivo_adjunto, archivo_final, passwo
         return False, f"Error al generar el PDF: {str(e)}"
 
 # Interfaz con Streamlit
-st.title("Generador de PDF Seguro con Adjuntos")
+st.title("Generador de PDF Seguro con Adjuntos")  
+
 st.write("Seleccione el banco, suba los archivos y genere un PDF protegido.")
 
 # Seleccionar banco
@@ -42,8 +44,10 @@ if st.button("Generar PDF"):
     else:
         # Nombre del archivo final
         nombre_archivo = f"mailfrom_{banco_seleccionado.replace(' ', '').lower()}@grupomegag_com.pdf"
-        carpeta_descargas = Path.home() / "Downloads"
-        archivo_final = carpeta_descargas / nombre_archivo
+        
+        # Crear archivo temporal para el PDF generado
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
+            archivo_final = tmp_file.name
 
         # Crear PDF
         exito, mensaje = crear_pdf_con_adjunto(
@@ -62,5 +66,7 @@ if st.button("Generar PDF"):
                     file_name=nombre_archivo,
                     mime="application/pdf"
                 )
+            # Elimina el archivo temporal después de la descarga
+            os.remove(archivo_final)
         else:
             st.error(mensaje)
