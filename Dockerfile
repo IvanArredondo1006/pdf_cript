@@ -9,6 +9,9 @@ COPY . .
 
 # Instala las dependencias
 RUN pip install --no-cache-dir -r requirements.txt
+# Instalar gpg
+RUN apt-get update && apt-get install -y gnupg
+
 
 # Comando para ejecutar Streamlit
 CMD ["streamlit", "run", "pdf_cript.py", "--server.port=8000", "--server.address=0.0.0.0"]
