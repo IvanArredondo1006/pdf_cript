@@ -9,6 +9,7 @@ BANCO_NITS = {
     "Bancolombia": "890903938",
     "Banco Occidente": "890300279",
     "Banco Bogotá": "860002964",
+    "Bancoldex": "800149923"
 }
 
 def crear_pdf_con_adjunto(archivo_correo, archivo_adjunto, archivo_final, password):
